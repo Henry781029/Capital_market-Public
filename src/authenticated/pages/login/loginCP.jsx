@@ -1,0 +1,46 @@
+import React, { Fragment, useState } from 'react';
+import { Button, TextField, Grid, Container } from '@material-ui/core';
+import { Colors } from '../../../shared/styles/Colors';
+import apiBaseUrl from '../../../shared/utils/Api';
+const LoginPage = () => {
+    const colors = Colors();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const login = async () => {
+        const userData = {
+            email: email,
+            password: password
+        }
+        console.log(userData)
+        try {
+            const response = await fetch(`${apiBaseUrl}/login`, {
+                method: 'POST',
+                body: JSON.stringify(userData),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            const user = await response.json();
+            console.log(user);
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    return <Fragment>
+        <Container maxWidth="sm">
+            <Grid container>
+                <Grid item xs={12}>
+                    <TextField id="outlined-basic" onChange={e => setEmail(e.target.value)} label="Email" variant="outlined" />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField id="outlined-basic" onChange={e => setPassword(e.target.value)} label="Password" type="password" variant="outlined" />
+                </Grid>
+            </Grid>
+            <Button variant="contained" onClick={login} className={colors.btnPrimary}>Inicar sesión</Button>
+        </Container>
+
+    </Fragment>
+}
+
+export default LoginPage;
